@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magia do Natal — Paz, Luz e Esperança</title>
+
+  <!-- Tailwind CSS para utilitários de layout e responsividade -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fontes Google Fonts temáticas para títulos, destaque e textos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Mountains+of+Christmas:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Folha de estilos principal do projeto -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="flex flex-col justify-between selection:bg-amber-400 selection:text-slate-950">
+  <!-- Camada de neve em canvas (não bloqueia cliques) -->
+  <canvas id="snow-canvas" aria-hidden="true"></canvas>
+
+  <!-- Camada do céu noturno com lua cheia e estrelas geradas via JS -->
+  <div id="sky-layer" class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+    <!-- Lua cheia com brilho suave -->
+    <div class="moon-orb absolute top-10 right-8 sm:top-14 sm:right-20 w-20 h-20 sm:w-28 sm:h-28 rounded-full opacity-95">
+      <span class="moon-crater w-4 h-4 top-5 left-5"></span>
+      <span class="moon-crater w-6 h-6 bottom-5 right-6"></span>
+      <span class="moon-crater w-3 h-3 top-12 right-5"></span>
+    </div>
+  </div>
+
+  <!-- Papai Noel com trenó e rena animada voando ao fundo -->
+  <div class="sleigh-layer" aria-hidden="true">
+    <div class="sleigh-flight">
+      <div class="sleigh-bob">
+        <svg class="sleigh-svg" viewBox="0 0 360 120" width="320" height="107">
+          <defs>
+            <linearGradient id="sleighBody" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ef4444" />
+              <stop offset="100%" stop-color="#991b1b" />
+            </linearGradient>
+            <linearGradient id="goldTrim" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fde047" />
+              <stop offset="100%" stop-color="#d97706" />
+            </linearGradient>
+            <radialGradient id="rudolphGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff4d4d" stop-opacity="0.95" />
+              <stop offset="55%" stop-color="#ef4444" stop-opacity="0.35" />
+              <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+
+          <!-- Rastro brilhante atrás do trenó -->
+          <g class="magic-trail">
+            <circle cx="115" cy="78" r="2.2" fill="#fde047" />
+            <circle cx="92" cy="84" r="1.6" fill="#fef08a" />
+            <circle cx="68" cy="74" r="2.5" fill="#bae6fd" />
+            <circle cx="44" cy="82" r="1.8" fill="#fde047" />
+            <circle cx="22" cy="76" r="1.4" fill="#ffffff" />
+          </g>
+
+          <!-- Rédea ligando o trenó à rena -->
+          <path
+            d="M 218 56 Q 258 46 296 44"
+            fill="none"
+            stroke="#fde68a"
+            stroke-width="1.6"
+            stroke-dasharray="3 2"
+            opacity="0.85"
+          />
+
+          <!-- Rena com nariz iluminado -->
+          <g transform="translate(282, 22)">
+            <circle class="rudolph-halo" cx="58" cy="24" r="11" fill="url(#rudolphGlow)" />
+            <g class="reindeer-leg-back">
+              <path d="M 24 44 L 18 62 L 13 65" fill="none" stroke="#78350f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+            <g class="reindeer-leg-front">
+              <path d="M 42 44 L 50 60 L 56 58" fill="none" stroke="#92400e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+            <ellipse cx="33" cy="37" rx="16" ry="10" fill="#92400e" />
+            <path d="M 17 34 L 10 30 L 13 37 Z" fill="#78350f" />
+            <path d="M 44 32 L 52 21 L 59 23 L 52 36 Z" fill="#92400e" />
+            <path d="M 49 20 L 45 10 M 48 15 L 42 13 M 49 13 L 53 9" fill="none" stroke="#fde68a" stroke-width="2.2" stroke-linecap="round" />
+            <path d="M 53 21 L 51 11 M 52 16 L 58 14" fill="none" stroke="#fde68a" stroke-width="2" stroke-linecap="round" />
+            <circle cx="54" cy="21" r="1.4" fill="#0f172a" />
+            <circle cx="59" cy="24" r="3.4" fill="#ef4444" />
+            <circle cx="58" cy="23" r="1.2" fill="#fecaca" />
+          </g>
+
+          <!-- Trenó com Papai Noel e presentes -->
+          <g transform="translate(125, 24)">
+            <circle cx="38" cy="36" r="15" fill="#dc2626" />
+            <circle cx="38" cy="20" r="8.5" fill="#fed7aa" />
+            <circle cx="41" cy="19" r="1.3" fill="#0f172a" />
+            <path d="M 32 23 Q 38 33 45 23 Q 39 36 32 23 Z" fill="#ffffff" />
+            <path d="M 29 17 Q 38 4 50 15 Z" fill="#dc2626" />
+            <circle cx="51" cy="15" r="3.2" fill="#ffffff" />
+            <rect x="29" y="15" width="18" height="4" rx="2" fill="#ffffff" />
+            <path d="M 44 33 L 55 29" stroke="#dc2626" stroke-width="5.5" stroke-linecap="round" />
+            <circle cx="56" cy="29" r="3" fill="#fed7aa" />
+            <path d="M 6 58 L 78 58 Q 90 58 92 46" fill="none" stroke="url(#goldTrim)" stroke-width="4" stroke-linecap="round" />
+            <line x1="22" y1="48" x2="22" y2="58" stroke="#fbbf24" stroke-width="3" />
+            <line x1="66" y1="48" x2="66" y2="58" stroke="#fbbf24" stroke-width="3" />
+            <path d="M 8 28 L 12 49 L 76 49 L 84 26 Q 74 33 56 33 L 8 28 Z" fill="url(#sleighBody)" />
+            <path d="M 8 28 L 84 26" stroke="url(#goldTrim)" stroke-width="2.5" stroke-linecap="round" />
+            <rect x="18" y="19" width="11" height="10" rx="1.5" fill="#38bdf8" />
+            <rect x="52" y="20" width="10" height="9" rx="1.5" fill="#facc15" />
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cabeçalho com marca e controle de música natalina -->
+  <header class="relative z-20 w-full max-w-6xl mx-auto px-4 sm:px-8 pt-6 flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
+      <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-red-600/90 border border-amber-300/60 text-amber-200 shadow-lg">
+        ✦
+      </span>
+      <span class="font-natal-script text-2xl sm:text-3xl text-amber-300 tracking-wide">
+        Noite de Natal
+      </span>
+    </div>
+
+    <!-- Botão de play/pause da melodia natalina -->
+    <button
+      id="audio-toggle-btn"
+      type="button"
+      aria-label="Tocar ou pausar música de Natal"
+      class="group flex items-center gap-3 px-4 py-2.5 rounded-full bg-slate-900/80 hover:bg-slate-800/95 border border-amber-400/50 text-amber-100 shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+    >
+      <span id="audio-icon" class="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 font-bold text-xs shadow">
+        ▶
+      </span>
+      <div class="text-left">
+        <div id="audio-status-text" class="text-xs sm:text-sm font-semibold text-amber-200 leading-tight">
+          Tocar Música
+        </div>
+        <div class="text-[11px] text-slate-300 leading-tight hidden sm:block">
+          Melodia Natalina
+        </div>
+      </div>
+
+      <!-- Indicador visual animado quando a música está tocando -->
+      <div id="eq-bars" class="flex items-end gap-1 h-5 pl-1" aria-hidden="true">
+        <span class="eq-bar"></span>
+        <span class="eq-bar"></span>
+        <span class="eq-bar"></span>
+        <span class="eq-bar"></span>
+      </div>
+    </button>
+  </header>
+
+  <!-- Conteúdo principal da landing page -->
+  <main class="relative z-20 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-8 pb-44 sm:pb-52 text-center">
+    <div class="max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/70 border border-red-400/40 text-amber-200 text-xs sm:text-sm font-medium mb-6 shadow-md">
+        <span>🎄</span>
+        <span>Celebre o amor, a paz e a esperança</span>
+      </div>
+
+      <h1 class="font-natal-titulo hero-quote text-3xl sm:text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-amber-100 to-amber-300 leading-tight tracking-wide mb-6">
+        “Que a luz do Natal ilumine cada sonho e aqueça todos os corações.”
+      </h1>
+
+      <p class="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-slate-200/95 font-normal leading-relaxed mb-9 drop-shadow">
+        Neste tempo mágico de reencontros e gratidão, que a serenidade da noite estrelada traga renovação para o seu lar, abraços sinceros e a alegria de compartilhar momentos inesquecíveis ao lado de quem você ama.
+      </p>
+
+      <!-- Controles interativos: desejo especial e iluminação das árvores -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button
+          id="wish-btn"
+          type="button"
+          class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-red-500 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-base sm:text-lg shadow-lg shadow-red-950/60 border border-amber-300/40 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2.5"
+        >
+          <span>✨</span>
+          <span>Receber Desejo de Natal</span>
+        </button>
+
+        <button
+          id="lights-btn"
+          type="button"
+          class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-slate-900/75 hover:bg-slate-800/90 text-amber-200 font-semibold text-base sm:text-lg border border-amber-400/40 shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2.5"
+        >
+          <span>💡</span>
+          <span id="lights-btn-label">Acender Luzes da Floresta</span>
+        </button>
+      </div>
+
+      <!-- Cartão exibido ao sortear uma mensagem de Natal -->
+      <div
+        id="wish-card"
+        class="hidden mt-8 max-w-xl mx-auto glass-card rounded-2xl p-6 text-center transition-all duration-500"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="text-amber-300 text-sm uppercase tracking-widest font-semibold mb-2">
+          ✦ Mensagem Especial para Você ✦
+        </div>
+        <p id="wish-text" class="font-natal-script text-2xl sm:text-3xl text-white leading-snug mb-3"></p>
+        <p id="wish-author" class="text-xs sm:text-sm text-amber-200/80"></p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cenário inferior com pinheiros nevados, boneco de neve animado e colinas -->
+  <section class="relative z-10 w-full pointer-events-none select-none -mt-36 sm:-mt-44" aria-label="Cenário de inverno com boneco de neve animado">
+    <div class="max-w-6xl mx-auto px-4 flex items-end justify-between relative">
+      <!-- Pinheiro esquerdo -->
+      <svg class="w-28 sm:w-44 md:w-52 h-auto -mb-4 drop-shadow-2xl" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="86" y="210" width="28" height="45" rx="4" fill="#3E2723" />
+        <polygon points="100,20 35,110 165,110" fill="#0F3D2E" />
+        <polygon points="100,65 25,165 175,165" fill="#14533E" />
+        <polygon points="100,115 15,220 185,220" fill="#19644C" />
+        <path d="M100 20 L68 65 Q85 75 100 62 Q115 75 132 65 Z" fill="#F8FAFC" />
+        <path d="M62 110 Q80 122 100 110 Q120 122 138 110 L125 93 L75 93 Z" fill="#E2E8F0" />
+        <path d="M45 165 Q72 178 100 165 Q128 178 155 165 L140 147 L60 147 Z" fill="#F8FAFC" />
+        <circle class="tree-light text-amber-300" cx="85" cy="95" r="5" fill="#FCD34D" />
+        <circle class="tree-light text-red-400" cx="118" cy="102" r="5" fill="#F87171" />
+        <circle class="tree-light text-sky-300" cx="70" cy="150" r="5.5" fill="#7DD3FC" />
+        <circle class="tree-light text-amber-300" cx="105" cy="142" r="5.5" fill="#FCD34D" />
+        <circle class="tree-light text-red-400" cx="132" cy="155" r="5.5" fill="#F87171" />
+        <circle class="tree-light text-emerald-300" cx="55" cy="202" r="6" fill="#6EE7B7" />
+        <circle class="tree-light text-amber-300" cx="95" cy="195" r="6" fill="#FCD34D" />
+        <circle class="tree-light text-red-400" cx="140" cy="204" r="6" fill="#F87171" />
+        <polygon points="100,4 104,15 116,15 106,22 110,33 100,26 90,33 94,22 84,15 96,15" fill="#FBBF24" />
+      </svg>
+
+      <!-- Boneco de neve animado -->
+      <div class="relative z-20 -mb-5 sm:-mb-6 mx-auto sm:mr-16">
+        <svg class="w-48 sm:w-64 md:w-72 h-auto drop-shadow-[0_18px_28px_rgba(0,0,0,0.65)]" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="snowGrad" cx="38%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#FFFFFF" />
+              <stop offset="70%" stop-color="#E2E8F0" />
+              <stop offset="100%" stop-color="#CBD5E1" />
+            </radialGradient>
+          </defs>
+
+          <ellipse cx="150" cy="276" rx="68" ry="12" fill="#0F172A" fill-opacity="0.35" />
+
+          <g class="snowman-body-group">
+            <g class="snowman-arm-left">
+              <path d="M108 168 L56 142 M72 150 L60 132 M66 147 L52 154" stroke="#5C3A21" stroke-width="5.5" stroke-linecap="round" />
+            </g>
+
+            <g class="snowman-arm-right">
+              <path d="M192 168 L246 132 M228 144 L238 124 M234 140 L250 144" stroke="#5C3A21" stroke-width="5.5" stroke-linecap="round" />
+            </g>
+
+            <circle cx="150" cy="222" r="54" fill="url(#snowGrad)" />
+            <circle cx="150" cy="162" r="41" fill="url(#snowGrad)" />
+
+            <circle cx="150" cy="152" r="4.2" fill="#1E293B" />
+            <circle cx="150" cy="170" r="4.2" fill="#1E293B" />
+            <circle cx="150" cy="188" r="4.2" fill="#1E293B" />
+
+            <g class="snowman-scarf-tail">
+              <path d="M164 134 L182 184 L164 188 L152 140 Z" fill="#DC2626" />
+              <path d="M166 176 L180 173" stroke="#FBBF24" stroke-width="3" />
+            </g>
+            <rect x="116" y="126" width="68" height="16" rx="8" fill="#B91C1C" />
+            <rect x="122" y="131" width="56" height="4" rx="2" fill="#FBBF24" fill-opacity="0.85" />
+
+            <circle cx="150" cy="100" r="32" fill="url(#snowGrad)" />
+
+            <ellipse cx="133" cy="105" rx="5.5" ry="3.5" fill="#FDA4AF" fill-opacity="0.75" />
+            <ellipse cx="167" cy="105" rx="5.5" ry="3.5" fill="#FDA4AF" fill-opacity="0.75" />
+
+            <circle class="snowman-eye" cx="139" cy="93" r="3.6" fill="#0F172A" />
+            <circle class="snowman-eye" cx="161" cy="93" r="3.6" fill="#0F172A" />
+            <circle cx="140" cy="91.8" r="1.1" fill="#FFFFFF" />
+            <circle cx="162" cy="91.8" r="1.1" fill="#FFFFFF" />
+
+            <polygon points="150,98 150,106 175,103" fill="#F97316" />
+            <polygon points="150,98 150,101 175,103" fill="#FB923C" />
+
+            <path d="M138 111 Q150 121 162 111" stroke="#1E293B" stroke-width="3" stroke-linecap="round" fill="none" />
+
+            <g transform="rotate(-6 150 70)">
+              <rect x="116" y="66" width="68" height="9" rx="4.5" fill="#1E293B" />
+              <rect x="126" y="32" width="48" height="36" rx="4" fill="#0F172A" />
+              <rect x="126" y="57" width="48" height="8" fill="#DC2626" />
+              <circle cx="166" cy="60" r="3.5" fill="#FBBF24" />
+              <ellipse cx="160" cy="56" rx="5" ry="2.5" transform="rotate(-25 160 56)" fill="#16A34A" />
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Pinheiro direito -->
+      <svg class="hidden md:block w-44 h-auto -mb-4 drop-shadow-2xl" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="86" y="210" width="28" height="45" rx="4" fill="#3E2723" />
+        <polygon points="100,30 40,115 160,115" fill="#14533E" />
+        <polygon points="100,75 28,170 172,170" fill="#19644C" />
+        <polygon points="100,120 18,220 182,220" fill="#0F3D2E" />
+        <path d="M100 30 L72 70 Q86 80 100 68 Q114 80 128 70 Z" fill="#F8FAFC" />
+        <path d="M50 170 Q75 182 100 170 Q125 182 150 170 L136 152 L64 152 Z" fill="#F8FAFC" />
+        <circle class="tree-light text-red-400" cx="90" cy="100" r="5" fill="#F87171" />
+        <circle class="tree-light text-amber-300" cx="115" cy="148" r="5.5" fill="#FCD34D" />
+        <circle class="tree-light text-sky-300" cx="76" cy="156" r="5.5" fill="#7DD3FC" />
+        <circle class="tree-light text-amber-300" cx="102" cy="198" r="6" fill="#FCD34D" />
+        <polygon points="100,14 104,25 116,25 106,32 110,43 100,36 90,43 94,32 84,25 96,25" fill="#FBBF24" />
+      </svg>
+    </div>
+
+    <!-- Colinas nevadas na base -->
+    <div class="relative w-full h-20 sm:h-28 overflow-hidden">
+      <svg class="w-full h-full" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,45 C320,105 580,5 960,55 C1180,82 1340,35 1440,45 L1440,120 L0,120 Z" fill="#CBD5E1" />
+        <path d="M0,65 C280,20 640,105 1040,48 C1240,20 1360,65 1440,60 L1440,120 L0,120 Z" fill="#F8FAFC" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- Rodapé integrado ao cenário noturno -->
+  <footer class="footer-natal relative z-20 text-center py-3.5 px-4 text-xs sm:text-sm font-medium">
+    Feliz Natal e um Próspero Ano Novo! ✨ Feito com carinho para celebrar a magia desta época.
+  </footer>
+
+  <!-- Script principal da aplicação -->
+  <script src="script.js"></script>
+</body>
+</html>

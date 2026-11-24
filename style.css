@@ -1,0 +1,361 @@
+/* =========================================================
+   VARIÁVEIS DE CORES DO TEMA NATALINO
+   ========================================================= */
+:root {
+  --midnight: #070d1f;
+  --deep-blue: #0f1d3d;
+  --gold: #fbbf24;
+  --gold-light: #fef08a;
+  --crimson: #dc2626;
+  --crimson-dark: #991b1b;
+  --snow: #f8fafc;
+}
+
+/* =========================================================
+   RESET E ESTILO BASE DA PÁGINA
+   ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background: radial-gradient(ellipse at top, #172b56 0%, #091126 55%, #040814 100%);
+  color: var(--snow);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Tipografias temáticas importadas no HTML */
+.font-natal-titulo {
+  font-family: "Cinzel Decorative", serif;
+}
+
+.font-natal-script {
+  font-family: "Mountains of Christmas", cursive;
+}
+
+/* Sombra dourada para reforçar o contraste do título principal */
+.hero-quote {
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.85),
+    0 0 28px rgba(251, 191, 36, 0.45);
+}
+
+/* Cartão translúcido para mensagens de Natal */
+.glass-card {
+  background: rgba(15, 29, 61, 0.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(251, 191, 36, 0.28);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+/* =========================================================
+   CAMADA DE NEVE E CÉU NOTURNO (LUA E ESTRELAS)
+   ========================================================= */
+#snow-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.moon-orb {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 55%, #fcd34d 100%);
+  box-shadow:
+    0 0 40px 12px rgba(254, 240, 138, 0.35),
+    0 0 90px 30px rgba(251, 191, 36, 0.15);
+}
+
+.moon-crater {
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(251, 191, 36, 0.22);
+}
+
+.star {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 9999px;
+  opacity: 0.7;
+  animation: twinkle var(--duration, 3s) ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* =========================================================
+   TRENÓ COM PAPAI NOEL E RENA VOANDO AO FUNDO
+   ========================================================= */
+.sleigh-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.sleigh-flight {
+  position: absolute;
+  top: 14%;
+  left: -380px;
+  animation: sleighFlyAcross 26s linear infinite;
+}
+
+.sleigh-bob {
+  animation: sleighBob 3.2s ease-in-out infinite;
+}
+
+.reindeer-leg-front {
+  transform-origin: 42px 44px;
+  animation: legGallopFront 0.65s ease-in-out infinite;
+}
+
+.reindeer-leg-back {
+  transform-origin: 24px 44px;
+  animation: legGallopBack 0.65s ease-in-out infinite;
+}
+
+.rudolph-halo {
+  transform-origin: 58px 24px;
+  animation: noseGlow 1.4s ease-in-out infinite;
+}
+
+.magic-trail circle {
+  animation: trailSparkle 1.2s ease-in-out infinite;
+}
+
+.magic-trail circle:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.magic-trail circle:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.magic-trail circle:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.magic-trail circle:nth-child(5) {
+  animation-delay: 0.8s;
+}
+
+@keyframes sleighFlyAcross {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(calc(50vw + 190px)) translateY(-24px);
+  }
+  100% {
+    transform: translateX(calc(100vw + 460px)) translateY(12px);
+  }
+}
+
+@keyframes sleighBob {
+  0%, 100% {
+    transform: rotate(-2deg) translateY(0);
+  }
+  50% {
+    transform: rotate(2.5deg) translateY(-6px);
+  }
+}
+
+@keyframes legGallopFront {
+  0%, 100% {
+    transform: rotate(18deg);
+  }
+  50% {
+    transform: rotate(-26deg);
+  }
+}
+
+@keyframes legGallopBack {
+  0%, 100% {
+    transform: rotate(-22deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+}
+
+@keyframes noseGlow {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.22);
+  }
+}
+
+@keyframes trailSparkle {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   ANIMAÇÕES DO BONECO DE NEVE E LUZES DOS PINHEIROS
+   ========================================================= */
+.snowman-body-group {
+  transform-origin: 150px 265px;
+  animation: snowmanSway 4.2s ease-in-out infinite;
+}
+
+.snowman-arm-right {
+  transform-origin: 192px 168px;
+  animation: waveRightArm 2.6s ease-in-out infinite;
+}
+
+.snowman-arm-left {
+  transform-origin: 108px 168px;
+  animation: waveLeftArm 3.8s ease-in-out infinite;
+}
+
+.snowman-eye {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: blinkEyes 5s infinite;
+}
+
+.snowman-scarf-tail {
+  transform-origin: 168px 142px;
+  animation: scarfFlutter 3s ease-in-out infinite;
+}
+
+@keyframes snowmanSway {
+  0%, 100% {
+    transform: rotate(-2.5deg) translateY(0);
+  }
+  50% {
+    transform: rotate(2.5deg) translateY(-3px);
+  }
+}
+
+@keyframes waveRightArm {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-28deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-22deg);
+  }
+}
+
+@keyframes waveLeftArm {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(12deg);
+  }
+}
+
+@keyframes blinkEyes {
+  0%, 46%, 50%, 96%, 100% {
+    transform: scaleY(1);
+  }
+  48%, 98% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes scarfFlutter {
+  0%, 100% {
+    transform: skewX(0deg) rotate(0deg);
+  }
+  50% {
+    transform: skewX(-6deg) rotate(4deg);
+  }
+}
+
+/* Luzes dos pinheiros: ficam acesas quando <body> recebe a classe "lights-on" */
+.tree-light {
+  opacity: 0.7;
+  transition: all 0.5s ease;
+}
+
+body.lights-on .tree-light {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px currentColor);
+  animation: bulbPulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes bulbPulse {
+  0% {
+    opacity: 0.65;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* =========================================================
+   EQUALIZADOR DO BOTÃO DE ÁUDIO E RODAPÉ
+   ========================================================= */
+.eq-bar {
+  width: 3px;
+  height: 6px;
+  background-color: #fbbf24;
+  border-radius: 9999px;
+  transition: height 0.2s ease;
+}
+
+.playing .eq-bar:nth-child(1) {
+  animation: eqBounce 0.6s ease-in-out infinite alternate;
+}
+
+.playing .eq-bar:nth-child(2) {
+  animation: eqBounce 0.45s ease-in-out 0.15s infinite alternate;
+}
+
+.playing .eq-bar:nth-child(3) {
+  animation: eqBounce 0.7s ease-in-out 0.3s infinite alternate;
+}
+
+.playing .eq-bar:nth-child(4) {
+  animation: eqBounce 0.5s ease-in-out 0.1s infinite alternate;
+}
+
+@keyframes eqBounce {
+  0% {
+    height: 5px;
+  }
+  100% {
+    height: 18px;
+  }
+}
+
+.footer-natal {
+  background: rgba(7, 13, 31, 0.92);
+  color: #e2e8f0;
+  border-top: 1px solid rgba(251, 191, 36, 0.22);
+}
